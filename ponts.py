@@ -44,7 +44,7 @@ df = pd.DataFrame(data, columns=column_names)
 # Filtre des villes pour n'avoir que les ponts de la ville de "Gênes"
 df_filtered = df[df["localisation"].str.startswith("Gênes")]
 
-DATABASE_URL = os.environ['DATABASE_URL']
+DATABASE_URL = os.environ['postgres://pjyflfrpaycgql:5babc4828af9a0749747e8f288ec088d99b8a8bd6647c904a12397b2131992ee@ec2-34-242-199-141.eu-west-1.compute.amazonaws.com:5432/daq7mhr06h7b1g']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 df_filtered.to_sql('ponts', conn, if_exists='append', index=False)
