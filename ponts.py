@@ -52,7 +52,7 @@ engine = sqlalchemy.create_engine(
     echo=False)
 # attach the data frame (df) to the database with a name of the
 # table; the name can be whatever you like
-df_filtered.to_sql('base-donnee', conn=engine, if_exists='append')
+df_filtered.to_sql('basedonnee', conn=engine, if_exists='append')
 # run a quick test
-print(engine.execute("SELECT * FROM base-donnee").fetchone())
+print(engine.execute("SELECT * FROM basedonnee").fetchone())
 
