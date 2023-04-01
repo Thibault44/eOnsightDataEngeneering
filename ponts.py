@@ -43,6 +43,7 @@ df = pd.DataFrame(data, columns=column_names)
 
 # Filtre des villes pour n'avoir que les ponts de la ville de "Gênes"
 df_filtered = df[df["localisation"].str.startswith("Gênes")]
+df_filtered['longueur'] = df_filtered['longueur'].apply(lambda x: None if x == "" else x)
 
 # Connexion à la base de données
 conn = psycopg2.connect(
