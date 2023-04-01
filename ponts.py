@@ -45,8 +45,7 @@ df = pd.DataFrame(data, columns=column_names)
 df_filtered = df[df["localisation"].str.startswith("Gênes")]
 df_filtered.loc[df_filtered['longueur'] == "", 'longueur'] = None
 df_filtered.date.iloc[0] = datetime.strptime('1678-01-01', '%Y-%m-%d')
-df_filtered["date"] = pd.to_datetime(df_filtered["date"], format='%Y-%m-%d')
-
+df_filtered.loc[:, "date"] = pd.to_datetime(df_filtered["date"], format='%Y-%m-%d')
 # Connexion à la base de données
 conn = psycopg2.connect(
     host="ec2-34-251-233-253.eu-west-1.compute.amazonaws.com",
