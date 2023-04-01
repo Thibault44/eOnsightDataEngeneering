@@ -54,5 +54,6 @@ engine = sqlalchemy.create_engine(
 # table; the name can be whatever you like
 df_filtered.to_sql('basedonnee', conn=engine, if_exists='append')
 # run a quick test
-print(engine.execute("SELECT * FROM basedonnee").fetchone())
+if __name__ == '__main__':
+    print(engine.execute("SELECT * FROM basedonnee").fetchone())
 
