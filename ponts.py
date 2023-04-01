@@ -15,7 +15,7 @@ soup = BeautifulSoup(response.text, "html.parser")
 tables = soup.find_all("table", {"class": "wikitable"})
 
 # Liste des noms des colonnes du DataFrame
-column_names = ['nom', 'longueur', "bridge_type", "voie_portée_franchie", "localisation", "region"]
+column_names = ['nom', 'longueur', "bridge_type", "voie_portée_franchie", "date", "localisation", "region"]
 
 # Liste des données à extraire pour chaque pont
 data = []
@@ -31,11 +31,12 @@ for table in tables:
             longueur = columns[4].text.strip()
             bridge_type = columns[5].text.strip()
             voie_portée_franchie = columns[6].text.strip()
+            date = columns[7].text.strip()
             localisation = columns[8].text.strip()
             region = columns[9].text.strip()
 
             # Ajout des données dans la liste
-            data.append([nom, longueur, bridge_type, voie_portée_franchie, localisation, region])
+            data.append([nom, longueur, bridge_type, voie_portée_franchie, date, localisation, region])
 
 # Création du DataFrame
 df = pd.DataFrame(data, columns=column_names)
@@ -43,6 +44,8 @@ df = pd.DataFrame(data, columns=column_names)
 # Filtre des villes pour n'avoir que les ponts de la ville de "Gênes"
 df_filtered = df[df["localisation"].str.startswith("Gênes")]
 df_filtered['longueur'] = df_filtered['longueur'].apply(lambda x: None if x == "" else x)
+df_filtered.date.iloc[0] = datetime.strptime('1678-01-01', '%Y-%m-%d')
+df_filtered["date"] = pd.to_datetime(df_filtered["date"], format='%Y-%m-%d')
 
 # Connexion à la base de données
 conn = psycopg2.connect(
@@ -54,9 +57,9 @@ conn = psycopg2.connect(
 # Insertion des données dans la base de données
 cur = conn.cursor()
 for index, row in df_filtered.iterrows():
-    cur.execute("INSERT INTO ponts (nom, longueur, bridge_type, voie_portée_franchie, localisation, region) "
-                "VALUES (%s, %s, %s, %s, %s, %s)",
-                (row['nom'], row['longueur'], row['bridge_type'], row['voie_portée_franchie'],
+    cur.execute("INSERT INTO ponts (nom, longueur, bridge_type, voie_portée_franchie, date, localisation, region) "
+                "VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                (row['nom'], row['longueur'], row['bridge_type'], row['voie_portée_franchie'], row['date'],
                  row['localisation'], row['region'],))
 conn.commit()
 
