@@ -57,7 +57,7 @@ for index, row in df_filtered.iterrows():
     cur.execute("INSERT INTO ponts (nom, longueur, bridge_type, voie_portée_franchie, date, localisation, region) "
                 "VALUES (%s, %s, %s, %s, %s, %s, %s)",
                 (row['nom'], row['longueur'], row['bridge_type'], row['voie_portée_franchie'], row['date'],
-                 row['localisation'], row['region'],))
+                 row['localisation'], row['region']))
 conn.commit()
 
 # Fermeture de la connexion
