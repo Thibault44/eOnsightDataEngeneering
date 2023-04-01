@@ -1,9 +1,7 @@
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
-import os
 import psycopg2
-import sqlalchemy
 
 
 # URL de la page Wikipédia
@@ -46,14 +44,22 @@ df = pd.DataFrame(data, columns=column_names)
 # Filtre des villes pour n'avoir que les ponts de la ville de "Gênes"
 df_filtered = df[df["localisation"].str.startswith("Gênes")]
 
-# link to your database
-engine = sqlalchemy.create_engine(
-    'postgres://pjyflfrpaycgql:5babc4828af9a0749747e8f288ec088d99b8a8bd6647c904a12397b2131992ee@ec2-34-242-199-141.eu-west-1.compute.amazonaws.com:5432/daq7mhr06h7b1g',
-    echo=False)
-# attach the data frame (df) to the database with a name of the
-# table; the name can be whatever you like
-df_filtered.to_sql('basedonnee', conn=engine, if_exists='append')
-# run a quick test
-if __name__ == '__main__':
-    print(engine.execute("SELECT * FROM basedonnee").fetchone())
+# Connexion à la base de données
+conn = psycopg2.connect(
+    host="ec2-34-242-199-141.eu-west-1.compute.amazonaws.com",
+    database="daq7mhr06h7b1g",
+    user="pjyflfrpaycgql",
+    password="5babc4828af9a0749747e8f288ec088d99b8a8bd6647c904a12397b2131992ee"
+)
 
+# Insertion des données dans la base de données
+cur = conn.cursor()
+for index, row in df_filtered.iterrows():
+    cur.execute("INSERT INTO ponts (nom, type, longueur, annee, latitude, longitude) VALUES (%s, %s, %s, %s, %s, %s)",
+                (row['nom'], row['Longueur'], row['bridge_type'], row['voie_portée_franchie'], row['date'],
+                 row['localisation'], row['region']))
+conn.commit()
+
+# Fermeture de la connexion
+cur.close()
+conn.close()
