@@ -46,10 +46,10 @@ df_filtered = df[df["localisation"].str.startswith("Gênes")]
 
 # Connexion à la base de données
 conn = psycopg2.connect(
-    host="ec2-34-242-199-141.eu-west-1.compute.amazonaws.com",
-    database="daq7mhr06h7b1g",
-    user="pjyflfrpaycgql",
-    password="5babc4828af9a0749747e8f288ec088d99b8a8bd6647c904a12397b2131992ee"
+    host="ec2-34-251-233-253.eu-west-1.compute.amazonaws.com",
+    database="de20cp98et6s4n",
+    user="uvueqhtwwixald",
+    password="6f5c9ce8db7795af0068d8f4e5c3879551bd73959a2e7100d439d22c964bc013"
 )
 # Insertion des données dans la base de données
 cur = conn.cursor()
@@ -57,7 +57,7 @@ for index, row in df_filtered.iterrows():
     cur.execute("INSERT INTO ponts (nom, longueur, bridge_type, voie_portée_franchie, date, localisation, region) "
                 "VALUES (%s, %s, %s, %s, %s, %s, %s)",
                 (row['nom'], row['longueur'], row['bridge_type'], row['voie_portée_franchie'], row['date'],
-                 row['localisation'], row['region']))
+                 row['localisation'], row['region'],))
 conn.commit()
 
 # Fermeture de la connexion
