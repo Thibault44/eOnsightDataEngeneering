@@ -44,6 +44,7 @@ df = pd.DataFrame(data, columns=column_names)
 # Filtre des villes pour n'avoir que les ponts de la ville de "Gênes"
 df_filtered = df[df["localisation"].str.startswith("Gênes")]
 df_filtered.loc[df_filtered['longueur'] == "", 'longueur'] = None
+df = df_filtered.copy()
 df_filtered.date.iloc[0] = datetime.strptime('1678-01-01', '%Y-%m-%d')
 df_filtered.loc[:, "date"] = pd.to_datetime(df_filtered["date"], format='%Y-%m-%d')
 # Connexion à la base de données
