@@ -1,3 +1,4 @@
+
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
@@ -43,12 +44,16 @@ df = pd.DataFrame(data, columns=column_names)
 
 # Filtre des villes pour n'avoir que les ponts de la ville de "Gênes"
 df_filtered = df[df["localisation"].str.startswith("Gênes")]
-df_filtered.loc[df_filtered['longueur'] == "", 'longueur'] = None
+
+df= df_filtered.copy()
+
+
+df_filtered['longueur'] = df_filtered['longueur'].apply(lambda x: None if x == "" else x)
+
 
 liste=df_filtered.date.values[1:].tolist()
 liste.insert(0,1978)
 dates=[datetime.datetime(int(year), 1, 1) for year in liste]
-df= df_filtered.copy()
 df_filtered.drop(columns=['date'], inplace=True)
 df_filtered['date']=dates
 # Connexion à la base de données
