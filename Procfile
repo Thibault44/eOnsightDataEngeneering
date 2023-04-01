@@ -1,1 +1,1 @@
-web: python ponts.py
+worker: python ponts.py
