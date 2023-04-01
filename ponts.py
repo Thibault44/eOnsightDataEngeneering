@@ -2,7 +2,7 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 import psycopg2
-
+from datetime import datetime
 
 # URL de la page Wikipédia
 url = "https://fr.wikipedia.org/wiki/Liste_de_ponts_d%27Italie"
@@ -43,7 +43,7 @@ df = pd.DataFrame(data, columns=column_names)
 
 # Filtre des villes pour n'avoir que les ponts de la ville de "Gênes"
 df_filtered = df[df["localisation"].str.startswith("Gênes")]
-df_filtered['longueur'] = df_filtered['longueur'].apply(lambda x: None if x == "" else x)
+df_filtered.loc[df_filtered['longueur'] == "", 'longueur'] = None
 df_filtered.date.iloc[0] = datetime.strptime('1678-01-01', '%Y-%m-%d')
 df_filtered["date"] = pd.to_datetime(df_filtered["date"], format='%Y-%m-%d')
 
