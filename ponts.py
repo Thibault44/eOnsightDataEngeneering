@@ -51,13 +51,12 @@ conn = psycopg2.connect(
     user="pjyflfrpaycgql",
     password="5babc4828af9a0749747e8f288ec088d99b8a8bd6647c904a12397b2131992ee"
 )
-
 # Insertion des données dans la base de données
 cur = conn.cursor()
 for index, row in df_filtered.iterrows():
     cur.execute("INSERT INTO ponts (nom, longueur, bridge_type, voie_portée_franchie, date, localisation, region) "
                 "VALUES (%s, %s, %s, %s, %s, %s)",
-                (row['nom'], row['Longueur'], row['bridge_type'], row['voie_portée_franchie'], row['date'],
+                (row['nom'], row['longueur'], row['bridge_type'], row['voie_portée_franchie'], row['date'],
                  row['localisation'], row['region']))
 conn.commit()
 
