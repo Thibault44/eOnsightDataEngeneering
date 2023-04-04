@@ -1,1 +1,1 @@
-worker: python ponts.py
+app: python ponts.py
