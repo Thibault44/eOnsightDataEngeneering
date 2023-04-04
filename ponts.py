@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 import psycopg2
 import datetime
+import os
 
 # URL de la page Wikipédia
 url = "https://fr.wikipedia.org/wiki/Liste_de_ponts_d%27Italie"
@@ -63,6 +64,13 @@ conn = psycopg2.connect(
     user="uvueqhtwwixald",
     password="6f5c9ce8db7795af0068d8f4e5c3879551bd73959a2e7100d439d22c964bc013"
 )
+
+# Récupération de l'URL de la base de données depuis la variable d'environnement
+db_url = os.environ['HEROKU_POSTGRESQL_WHITE_URL']
+
+# Connexion à la base de données
+conn = psycopg2.connect(db_url)
+
 # Insertion des données dans la base de données
 cur = conn.cursor()
 for index, row in df_filtered.iterrows():
