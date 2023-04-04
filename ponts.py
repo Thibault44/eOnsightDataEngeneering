@@ -57,13 +57,6 @@ liste.insert(0,1978)
 dates=[datetime.datetime(int(year), 1, 1) for year in liste]
 df_filtered.drop(columns=['date'], inplace=True)
 df_filtered['date']=dates
-# Connexion à la base de données
-conn = psycopg2.connect(
-    host="ec2-34-251-233-253.eu-west-1.compute.amazonaws.com",
-    database="de20cp98et6s4n",
-    user="uvueqhtwwixald",
-    password="6f5c9ce8db7795af0068d8f4e5c3879551bd73959a2e7100d439d22c964bc013"
-)
 
 # Récupération de l'URL de la base de données depuis la variable d'environnement
 db_url = os.environ['HEROKU_POSTGRESQL_WHITE_URL']
