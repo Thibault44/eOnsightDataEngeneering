@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 import psycopg2
 import datetime
-import os
+from sqlalchemy import create_engine
 
 # URL de la page Wikipédia
 url = "https://fr.wikipedia.org/wiki/Liste_de_ponts_d%27Italie"
@@ -59,20 +59,19 @@ df_filtered.drop(columns=['date'], inplace=True)
 df_filtered['date']=dates
 
 # Récupération de l'URL de la base de données depuis la variable d'environnement
-db_url = os.environ['HEROKU_POSTGRESQL_WHITE_URL']
-
+#db_url = os.environ['HEROKU_POSTGRESQL_WHITE_URL']
+HEROKU_POSTGRESQL_WHITE_URL="postgres://uvueqhtwwixald:6f5c9ce8db7795af0068d8f4e5c3879551bd73959a2e7100d439d22c964bc013@ec2-34-251-233-253.eu-west-1.compute.amazonaws.com:5432/de20cp98et6s4n"
 # Connexion à la base de données
-conn = psycopg2.connect(db_url)
+db = create_engine(HEROKU_POSTGRESQL_WHITE_URL)
 
 # Insertion des données dans la base de données
-cur = conn.cursor()
+db.execute("CREATE TABLE IF NOT EXISTS eonsight2 (nom, longueur, bridge_type, voie_portée_franchie, date, localisation, region)")
 for index, row in df_filtered.iterrows():
-    cur.execute("INSERT INTO de20cp98et6s4n (nom, longueur, bridge_type, voie_portée_franchie, date, localisation, region) "
+    db.execute("INSERT INTO eonsight2 (nom, longueur, bridge_type, voie_portée_franchie, date, localisation, region) "
                 "VALUES (%s, %s, %s, %s, %s, %s, %s)",
                 (row['nom'], row['longueur'], row['bridge_type'], row['voie_portée_franchie'], row['date'],
-                 row['localisation'], row['region']))
-conn.commit()
+                 row['localisation'], row['region'],))
 
-# Fermeture de la connexion
-cur.close()
-conn.close()
+results_set=db.execute("SELECT * FROM eonsight2")
+for r in results_set:
+    print(r)
