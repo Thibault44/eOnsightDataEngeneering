@@ -1,1 +1,1 @@
-web: python ponts.py
+web: gunicorn app:app
