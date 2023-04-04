@@ -73,9 +73,12 @@ for index, row in df_filtered.iterrows():
     cur.execute("INSERT INTO eonsight2 (nom, longueur, bridge_type, voies, localisation, region) "
                 "VALUES (%s, %s, %s, %s, %s, %s)",
                 (row['nom'], row['longueur'], row['bridge_type'], row['voie_portee_franchie'],
-                 row['localisation'], row['region'],))
+                 row['localisation'], row['region']))
 conn.commit()
 
+cur.execute('SELECT * FROM eonsight2;') # On récupère les valeurs de la base de données
+for row in cur.fetchall(): # On affiche les valeurs
+    print(row)
 # Fermeture de la connexion
 cur.close()
 conn.close()
