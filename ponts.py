@@ -3,7 +3,7 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 import psycopg2
-import datetime
+#import datetime
 
 # URL de la page Wikipédia
 url = "https://fr.wikipedia.org/wiki/Liste_de_ponts_d%27Italie"
@@ -47,15 +47,16 @@ df_filtered = df[df["localisation"].str.startswith("Gênes")]
 
 df= df_filtered.copy()
 
-
+#gestion valeur manquante
 df_filtered['longueur'] = df_filtered['longueur'].apply(lambda x: None if x == "" else x)
 
-
+#code pour conserver les dates
 #liste=df_filtered.date.values[1:].tolist()
 #liste.insert(0,1978)
 #dates=[datetime.datetime(int(year), 1, 1) for year in liste]
 #df_filtered.drop(columns=['date'], inplace=True)
 #df_filtered['date']=dates
+
 # Connexion à la base de données
 conn = psycopg2.connect(
     host="ec2-34-251-233-253.eu-west-1.compute.amazonaws.com",
@@ -65,7 +66,6 @@ conn = psycopg2.connect(
     port='5432'
 )
 # Insertion des données dans la base de données
-print(df_filtered.iloc[0])
 cur = conn.cursor()
 cur.execute("CREATE TABLE IF NOT EXISTS eonsight2 (nom VARCHAR(255), longueur VARCHAR(255), bridge_type VARCHAR(255)"
             ", voies VARCHAR(255), localisation VARCHAR(255), region VARCHAR(255))")
@@ -76,8 +76,10 @@ for index, row in df_filtered.iterrows():
                  row['localisation'], row['region']))
 conn.commit()
 
-cur.execute('SELECT * FROM eonsight2;') # On récupère les valeurs de la base de données
-for row in cur.fetchall(): # On affiche les valeurs
+# Récupèration des valeurs de la base de données
+cur.execute('SELECT * FROM eonsight2;')
+# On affiche les valeurs
+for row in cur.fetchall():
     print(row)
 # Fermeture de la connexion
 cur.close()
