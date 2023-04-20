@@ -4,9 +4,9 @@ Le projet eOnsightDataEngineering vise à extraire les données de ponts (noms, 
 
 ## Installation
 Cloner le repo sur votre machine :
-shell
-Copy code
+```
 $ git clone https://github.com/[username]/eOnsightDataEngineering.git
+```
 Installer les dépendances requises :
 ruby
 Copy code
